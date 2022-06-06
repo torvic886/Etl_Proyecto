@@ -1,15 +1,4 @@
-import requests
-# Api del Estaciones Meteorológicas e Hidrológicas de Colombia
-# prueba
-# Implementacion Api
-# Prueba conexion repositorio
-url = "https://www.datos.gov.co/resource/ka9f-zy7y.json"
-
-headers = {
-    "Accept": "application/json",
-    "Accept-Encoding": "gzip"
-}
-
-response = requests.get(url, headers=headers)
-
-print(response.text)
+import boto3
+# Exporto el archivo de una ubicacion de la pc a s3 extractbut
+s3 = boto3.client('s3')
+s3.upload_file('C:/Users/Lenovo/Documents/S12/BI/ProyectoFinal/PF2.0/data.json', 'extractbut', 'data.json')
