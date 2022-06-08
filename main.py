@@ -1,4 +1,7 @@
-import boto3
-# Exporto el archivo de una ubicacion de la pc a s3 extractbut
-s3 = boto3.client('s3')
-s3.upload_file('C:/Users/Lenovo/Documents/S12/BI/ProyectoFinal/PF2.0/data.json', 'extractbut', 'data.json')
+import json
+
+import requests
+response = requests.get("https://www.datos.gov.co/resource/ka9f-zy7y.json")
+json.loads(response.content)
+print(json.loads(response.content))
+
