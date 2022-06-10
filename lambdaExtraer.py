@@ -4,31 +4,25 @@ import boto3
 import time
 import os
 
-# Credenciales
+# Credenciales para poder acceder a la api, url, id key ,key y secret key
 API_KEY = os.getenv('API_KEY')
 API_URL = os.getenv('API_URL')
 ACCESS_KEY = os.getenv('ACCESS_KEY')
 SECRET_ACCESS_KEY = os.getenv('SECRET_ACCESS_KEY')
 
 
-# Método que se encarga de usar datos de la api
+# Éste método se encarga de usar datos de la api que se desan visualizar
 def lambda_handler(event, context):
-    # message = event['Records'][0]['Sns']['Message']
-    # json_message = json.loads(message)
-    # function = json_message['function']
-    # codigo = json_message['codigo']
-    # categoria = json_message['categoria']
-
     url = API_URL
 
     # Petición a la ruta
-    # querystring = {"codigo": codigo, "categoria": categoria}
-
-    # Extraemos la URL de la api y se consume por medio del request
+    # Extraemos el URL de la api y de paso la consumimos por medio del request
     # GET y eso nos da una data de tipo json
     data = requests.request("GET", url, headers={"$$app_token": API_KEY}).json()
-    print('data ', data)
 
+    print('data', data)
+
+    # Tiempo actual de la captura de los datos
     date_consult_api = int(time.time())
     if len(data) == 0:
         print('data not found')  # No recibió ninguna data
@@ -38,21 +32,21 @@ def lambda_handler(event, context):
             # utilizado para mandar los datos a S3
             data_dict = {
                 'data_api': data,
-                'date_consult_api': data,  # duda para mañana
+                'date_consult_api': data,
                 'date_load_data': time.time(),
             }
 
             # Éste método recibe el data que se generó en el data diccionario
             response_upload = uploadS3(data_dict)
             if response_upload:
-                print('la data se cargo correctamente')
+                print('la data se cargó correctamente')
                 # lanzar la otra lambda
 
             else:
-                print('la data no se cargo correctamente')
+                print('la data no se cargó correctamente')
 
 
-# Método que carga los datos al S3, dándole una ruta del bucket y una ruta del load key
+# Método el cual carga los datos al S3, dándole una ruta del bucket y una ruta del load key
 def uploadS3(data):
     try:
         # Guardamos el S3 en el bucket de extraer y le enviamos la ruta del archivo
